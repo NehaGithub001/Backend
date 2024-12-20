@@ -1,4 +1,4 @@
-﻿using Backend.Models;
+﻿using Backend.Service.IService;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,11 +10,11 @@ namespace Backend
     [ApiController]
     public class DepartmentController : ControllerBase
     {
-        private SqlPracticeContext _context { get; }
+        private readonly IDepartmentService _departmentService;
 
-        public DepartmentController(SqlPracticeContext context)
+        public DepartmentController(IDepartmentService departmentService)
         {
-            _context = context;
+            _departmentService = departmentService;
         }
 
         [HttpGet]
@@ -22,9 +22,7 @@ namespace Backend
         public async Task<ActionResult> GetDepartment()
         {
 
-            var depatments = await _context.Depatments
-                .OrderByDescending(q => q.DeptName)
-                .ToListAsync();
+           var depatments=await _departmentService.GetDepartments();
 
             var response = new
             {
@@ -38,7 +36,7 @@ namespace Backend
         [HttpGet("{id}")]
         public async Task<IActionResult> GetDepartmentById(int id)
         {
-            var depatment = await _context.Depatments.FirstOrDefaultAsync(q => q.DeptId == id);
+            var depatment = await _departmentService.GetDepartmentById(id);
             if (depatment == null)
             {
                 return NotFound();

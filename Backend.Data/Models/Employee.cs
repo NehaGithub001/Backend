@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Backend.Models;
+namespace Backend.Data.Models;
 
 public partial class Employee
 {
